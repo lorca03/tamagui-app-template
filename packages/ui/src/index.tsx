@@ -1,0 +1,13 @@
+export * from 'tamagui'
+export * from '@tamagui/toast'
+export { config } from '@my/config'
+export * from './CustomToast'
+export * from './SwitchThemeButton'
+export * from './DataTable'
+export * from './FilterModal'
+export * from './TabSwitcher'
+export * from './charts'
+// Export explícito (evita depender del barrel interno si el editor/patch falla)
+export * from './charts/DonutChart'
+export * from './charts/ResponsiveChart'
+export * from './inputs'
