@@ -2,7 +2,10 @@
 
 # dependencies
 /node_modules
-.yarn
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/versions
 .next
 /.pnp
 .pnp.js
