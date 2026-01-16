@@ -9,6 +9,7 @@ module.exports = {
     '@tamagui/react-native-svg',
     '@tamagui/next-theme',
     '@tamagui/lucide-icons',
+    'ui'
   ],
   experimental: {
     scrollRestoration: true,

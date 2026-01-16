@@ -1,3 +1,6 @@
 {
-  "installCommand": "yarn set version 4 && yarn install"
+  "installCommand": "cd ../.. && yarn set version 4 && yarn install",
+  "buildCommand": "cd ../.. && yarn build && cd apps/next && next build",
+  "outputDirectory": "apps/next/.next",
+  "framework": "nextjs"
 }
