@@ -1,5 +1,5 @@
 {
-  "buildCommand": "yarn build && cd apps/next && next build",
+  "buildCommand": "yarn workspace next-app build",
   "outputDirectory": "apps/next/.next",
   "installCommand": "corepack enable && (test -f .yarn/releases/yarn-4.5.0.cjs || yarn set version 4.5.0) && yarn install",
   "framework": "nextjs"
