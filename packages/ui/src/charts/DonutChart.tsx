@@ -1,9 +1,9 @@
 'use client'
 
-import { useId, useMemo } from 'react'
+import { useId, useMemo, useState, useEffect } from 'react'
 import { Platform } from 'react-native'
 import { useTheme } from 'tamagui'
-import Svg, { Circle, G } from 'react-native-svg'
+import Svg, { Circle, G } from '@tamagui/react-native-svg'
 
 export type DonutSlice = {
   label: string
@@ -26,14 +26,29 @@ export function DonutChart({
 }) {
   const theme = useTheme()
   const id = useId()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Valores por defecto para evitar mismatch durante hidratación
+  const defaultPalette = ['#3b82f6', '#2563eb', '#1d4ed8', '#64748b']
+  const defaultBorderColor = '#e2e8f0'
 
   const palette = useMemo(() => {
+    if (!mounted) return defaultPalette
     const b9 = (theme.blue9?.val as string) || '#3b82f6'
     const b8 = (theme.blue8?.val as string) || '#2563eb'
     const b7 = (theme.blue7?.val as string) || '#1d4ed8'
     const g = (theme.gray10?.val as string) || '#64748b'
     return [b9, b8, b7, g]
-  }, [theme.blue7?.val, theme.blue8?.val, theme.blue9?.val, theme.gray10?.val])
+  }, [mounted, theme.blue7?.val, theme.blue8?.val, theme.blue9?.val, theme.gray10?.val])
+
+  const borderColor = useMemo(() => {
+    if (!mounted) return defaultBorderColor
+    return (theme.borderColor?.val as string) || defaultBorderColor
+  }, [mounted, theme.borderColor?.val])
 
   const total = data.reduce((acc, s) => acc + s.value, 0) || 1
   const radius = (size - thickness) / 2
@@ -41,17 +56,19 @@ export function DonutChart({
   const cy = size / 2
   const c = 2 * Math.PI * radius
 
-  let offset = 0
-  const slices = data.map((s, idx) => {
-    const fraction = s.value / total
-    const dash = fraction * c
-    const gap = c - dash
-    const stroke = s.color || palette[idx % palette.length]
-    const dashArray = `${dash} ${gap}`
-    const dashOffset = -offset
-    offset += dash
-    return { stroke, dashArray, dashOffset }
-  })
+  const slices = useMemo(() => {
+    let offset = 0
+    return data.map((s, idx) => {
+      const fraction = s.value / total
+      const dash = fraction * c
+      const gap = c - dash
+      const stroke = s.color || palette[idx % palette.length]
+      const dashArray = `${dash} ${gap}`
+      const dashOffset = -offset
+      offset += dash
+      return { stroke, dashArray, dashOffset }
+    })
+  }, [data, total, c, palette])
 
   const shouldAnimate = Platform.OS === 'web' && animateOnMount
   const animationName = `tmg_donut_${id}`
@@ -61,7 +78,7 @@ export function DonutChart({
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
-      // @ts-expect-error
+      suppressHydrationWarning
       style={
         shouldAnimate
           ? {
@@ -72,7 +89,6 @@ export function DonutChart({
       }
     >
       {shouldAnimate ? (
-        // @ts-expect-error - style injection en web
         <style>{`
           @keyframes ${animationName} {
             from { opacity: 0; transform: scale(0.96); }
@@ -87,7 +103,7 @@ export function DonutChart({
           cx={cx}
           cy={cy}
           r={radius}
-          stroke={(theme.borderColor?.val as string) || '#e2e8f0'}
+          stroke={borderColor}
           strokeWidth={thickness}
           fill="transparent"
         />
@@ -101,9 +117,7 @@ export function DonutChart({
             strokeWidth={thickness}
             strokeLinecap="round"
             fill="transparent"
-            // @ts-expect-error
             strokeDasharray={s.dashArray}
-            // @ts-expect-error
             strokeDashoffset={s.dashOffset}
           />
         ))}

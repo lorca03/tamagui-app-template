@@ -4,8 +4,9 @@ export type { TextInputProps } from './TextInput'
 export { PasswordInput } from './PasswordInput'
 export type { PasswordInputProps } from './PasswordInput'
 
-export { FileInput } from './FileInput.web'
-export type { FileInputProps } from './FileInput.web'
+// Exportamos desde el wrapper que Metro resolverá automáticamente
+export { FileInput } from './FileInput'
+export type { FileInputProps } from './FileInput'
 
 export { SelectInput } from './SelectInput'
 export type { SelectInputProps, SelectOption } from './SelectInput'
@@ -15,3 +16,6 @@ export type { MultiSelectInputProps, MultiSelectOption } from './MultiSelectInpu
 
 export { SelectWithFilter } from './SelectWithFilter'
 export type { SelectWithFilterProps, SelectWithFilterOption } from './SelectWithFilter'
+
+export { PhoneInput } from './PhoneInput'
+export type { PhoneInputProps } from './PhoneInput'

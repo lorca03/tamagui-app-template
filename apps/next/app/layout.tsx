@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { NextTamaguiProvider } from 'app/provider/NextTamaguiProvider'
+import { WebLayout } from 'app/features/admin/WebLayout'
 
 export const metadata: Metadata = {
   title: 'Tamagui • App Router',
@@ -15,7 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body>
-        <NextTamaguiProvider>{children}</NextTamaguiProvider>
+        <NextTamaguiProvider>
+          <WebLayout>{children}</WebLayout>
+        </NextTamaguiProvider>
       </body>
     </html>
   )

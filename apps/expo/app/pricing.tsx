@@ -1,14 +1,10 @@
-import { Stack } from 'expo-router'
 import { AdminPricingScreen } from 'app/features/admin/pricing-screen'
-import { AdminLayout } from 'app/features/admin/layout'
+import { MobileLayout } from 'app/features/admin/MobileLayout'
 
 export default function Screen() {
   return (
-    <>
-      <Stack.Screen options={{ title: 'Pricing' }} />
-      <AdminLayout platform="expo">
-        <AdminPricingScreen />
-      </AdminLayout>
-    </>
+    <MobileLayout>
+      <AdminPricingScreen />
+    </MobileLayout>
   )
 }

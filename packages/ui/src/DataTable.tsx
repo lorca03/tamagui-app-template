@@ -23,7 +23,8 @@ import {
   ArrowUpDown,
   Check,
 } from '@tamagui/lucide-icons'
-import { useState, useMemo, ReactNode } from 'react'
+import { useState, useMemo, ReactNode, useCallback } from 'react'
+import type { LayoutChangeEvent } from 'react-native'
 
 export type DataTableColumn<T = any> = {
   key: string
@@ -91,6 +92,14 @@ export function DataTable<T extends Record<string, any>>({
   const [selectedRows, setSelectedRows] = useState<Set<number>>(new Set())
   const [actionMenuOpen, setActionMenuOpen] = useState<number | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [containerWidth, setContainerWidth] = useState<number | undefined>(undefined)
+
+  const handleContainerLayout = useCallback((e: LayoutChangeEvent) => {
+    const width = Math.round(e.nativeEvent.layout.width)
+    if (width > 0) {
+      setContainerWidth(width)
+    }
+  }, [])
 
   // Filter data based on search
   const filteredData = useMemo(() => {
@@ -271,8 +280,17 @@ export function DataTable<T extends Record<string, any>>({
             </XStack>
           )}
           {/* Scroll horizontal para la tabla */}
-          <ScrollView horizontal showsHorizontalScrollIndicator={true}>
-            <YStack minWidth="100%">
+          <YStack flex={1} width="100%" onLayout={handleContainerLayout}>
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={true}
+              flex={1}
+            >
+              <YStack 
+                minWidth={containerWidth ? `${containerWidth}px` : "100%"} 
+                width={containerWidth ? `${containerWidth}px` : "100%"} 
+                flexShrink={0}
+              >
               {/* Header de la tabla */}
               <XStack
                 backgroundColor="$gray2"
@@ -282,6 +300,7 @@ export function DataTable<T extends Record<string, any>>({
                 gap="$4"
                 alignItems="center"
                 minWidth="100%"
+                width="100%"
               >
               {selectable && (
                 <XStack minWidth={50} alignItems="center" justifyContent="center">
@@ -375,6 +394,7 @@ export function DataTable<T extends Record<string, any>>({
                     gap="$4"
                     alignItems="center"
                     minWidth="100%"
+                    width="100%"
                     backgroundColor={
                       striped && index % 2 === 1 ? '$gray1' : 'transparent'
                     }
@@ -503,6 +523,7 @@ export function DataTable<T extends Record<string, any>>({
               )}
             </YStack>
           </ScrollView>
+          </YStack>
 
           {/* Paginación y resultados dentro de la tabla */}
           {(pagination || searchable) && (

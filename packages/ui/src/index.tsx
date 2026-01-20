@@ -5,6 +5,8 @@ export * from './CustomToast'
 export * from './SwitchThemeButton'
 export * from './DataTable'
 export * from './FilterModal'
+export * from './Modal'
+export * from './ProfileEditModal'
 export * from './TabSwitcher'
 export * from './charts'
 // Export explícito (evita depender del barrel interno si el editor/patch falla)

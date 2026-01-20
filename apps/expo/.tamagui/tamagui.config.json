@@ -28716,12 +28716,6 @@
             "neverFlatten": true,
             "isHOC": true
           }
-        },
-        "FileInput": {
-          "staticConfig": {
-            "displayName": "ProxyWorm - Check excludeReactNativeWebExports",
-            "_isProxyWorm": true
-          }
         }
       }
     },

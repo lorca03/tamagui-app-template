@@ -47,24 +47,39 @@ const mockNotifications: Notification[] = [
   },
 ]
 
-export function PopoverNotifications() {
+type PopoverNotificationsProps = {
+  shape?: 'round' | 'square'
+}
+
+export function PopoverNotifications({ shape = 'round' }: PopoverNotificationsProps = {}) {
+  const isRound = shape === 'round'
+  
   return (
     <YStack position="relative">
       <Popover size="$5" allowFlip placement="bottom-end" offset={8}>
         <Popover.Trigger>
           <Button
             size="$4"
-            circular
+            circular={isRound}
             variant="outlined"
             icon={Bell}
             borderColor="$borderColor"
             alignItems="center"
             justifyContent="center"
+            borderRadius={isRound ? undefined : '$3'}
             hoverStyle={{
               backgroundColor: '$backgroundHover',
               borderColor: '$borderColorHover',
-            }}
-          />
+            }}            
+          >
+            {
+              !isRound && (
+                <Paragraph size="$4" color="$color" fontWeight="500">
+                  Notifications
+                </Paragraph>
+              )
+            }
+          </Button>
         </Popover.Trigger>
 
         <Popover.Content
@@ -72,16 +87,24 @@ export function PopoverNotifications() {
           borderColor="$borderColor"
           backgroundColor="$background"
           borderRadius="$4"
-          shadowColor="$color"
+          shadowColor="$shadowColor"
           shadowOffset={{ width: 0, height: 4 }}
           shadowOpacity={0.1}
           shadowRadius={12}
           padding={0}
           width={380}
           maxHeight={500}
-          enterStyle={{ opacity: 0, scale: 0.95, y: -10 }}
+          elevationAndroid={8}
+          opacity={1}
+          position="relative"
+          enterStyle={{ opacity: 1, scale: 1, y: 0 }}
           exitStyle={{ opacity: 0, scale: 0.95, y: -10 }}
           animation="quick"
+          style={{
+            opacity: 1,
+            display: 'flex',
+            visibility: 'visible',
+          }}
         >
           <Popover.Arrow borderWidth={1} borderColor="$borderColor" />
 

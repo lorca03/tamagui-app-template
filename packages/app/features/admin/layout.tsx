@@ -3,7 +3,7 @@
 import { Button, Card, H3, Input, Paragraph, ScrollView, XStack, YStack } from 'tamagui'
 import {
   LayoutDashboard,
-  Settings,
+  User,
   FileText,
   Table,
   Search,
@@ -60,7 +60,7 @@ const navItems: NavItem[] = [
     href: '/pricing',
     category: 'tools',
   },
-  { id: 'settings', label: 'Configuración', icon: Settings, href: '/settings', category: 'tools' },
+  { id: 'profile', label: 'Perfil', icon: User, href: '/profile', category: 'tools' },
 ]
 
 const SIDEBAR_COLLAPSED_STORAGE_KEY = 'admin.sidebarCollapsed'
@@ -413,6 +413,7 @@ export const AdminLayout = ({
                 scale: 0.98,
               }}
               animation="quick"
+              onPress={platform === 'next' ? () => router.push('/profile') : undefined}
             >
               <YStack
                 width={40}
@@ -433,9 +434,6 @@ export const AdminLayout = ({
               <YStack gap={2} $sm={{ display: 'none' }}>
                 <Paragraph fontWeight="600" size="$4" color="$color">
                   Admin User
-                </Paragraph>
-                <Paragraph size="$2" color="$colorFocus">
-                  Administrador
                 </Paragraph>
               </YStack>
               <ChevronDown size={18} color="$colorFocus" $sm={{ display: 'none' }} />

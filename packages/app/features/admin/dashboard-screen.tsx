@@ -404,14 +404,14 @@ export const AdminDashboardScreen = () => {
   ] as const
 
   return (
-    <YStack flex={1} gap="$6">
+    <YStack flex={1} gap="$4" $md={{ gap: '$6' }}>
       {/* Encabezado (más simple y limpio) */}
       <XStack justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="$4">
         <YStack gap="$2">
-          <H1 size="$10" fontWeight="800" color="$color" letterSpacing={-1}>
+          <H1 size="$9" $md={{ size: '$10' }} fontWeight="800" color="$color" letterSpacing={-1}>
             Panel de Control
           </H1>
-          <Paragraph size="$5" color="$color" opacity={0.7} fontWeight="500">
+          <Paragraph size="$4" $md={{ size: '$5' }} color="$color" opacity={0.7} fontWeight="500">
             Bienvenido de vuelta, aquí está tu resumen de hoy
           </Paragraph>
         </YStack>
@@ -428,9 +428,27 @@ export const AdminDashboardScreen = () => {
       />
 
       {/* Estadísticas (3 tarjetas en una fila, responsivo) */}
-      <XStack gap="$4" flexWrap="wrap">
+      <XStack 
+        gap="$3" 
+        flexWrap="nowrap" 
+        flexDirection="column" 
+        alignItems="stretch" 
+        $md={{ 
+          gap: '$4', 
+          flexDirection: 'row' 
+        }}
+      >
         {METRICS[timeRange][metricKey].map((card) => (
-          <YStack key={card.title} flex={1} minWidth={280} $md={{ maxWidth: '33.3333%' }}>
+          <YStack 
+            key={card.title} 
+            width="100%"
+            $md={{ 
+              flex: 1,
+              flexBasis: 0,
+              minWidth: 0,
+              width: 'auto'
+            }}
+          >
             <StatCard {...card} />
           </YStack>
         ))}
@@ -438,9 +456,11 @@ export const AdminDashboardScreen = () => {
 
       {/* Contenido principal (estructura de referencia) */}
       <XStack
-        gap="$4"
+        gap="$3"
         flexWrap="wrap"
-        alignItems="flex-start"
+        flexDirection="column"
+        alignItems="stretch"
+        $md={{ gap: '$4', flexDirection: 'row', alignItems: 'flex-start' }}
         $xl={{
           flexWrap: 'nowrap',
           alignItems: 'stretch',
@@ -448,16 +468,20 @@ export const AdminDashboardScreen = () => {
       >
         {/* Columna izquierda (2/3): 2 tarjetas arriba + embudo abajo */}
         <YStack
-          flex={2}
+          flex={1}
+          width="100%"
           minWidth={0}
+          $md={{ flex: 2, width: 'auto' }}
           $xl={{ flexBasis: '66.6666%', maxWidth: '66.6666%' }}
           gap="$4"
         >
-          <XStack gap="$4" flexWrap="wrap" $md={{ flexWrap: 'nowrap' }}>
+          <XStack gap="$3" flexDirection="column" $md={{ gap: '$4', flexDirection: 'row', flexWrap: 'nowrap' }}>
             <Card
               flex={1}
+              width="100%"
               minWidth={0}
               maxWidth="100%"
+              $md={{ width: 'auto' }}
               padding="$5"
               borderRadius="$5"
               borderWidth={1}
@@ -465,7 +489,7 @@ export const AdminDashboardScreen = () => {
               backgroundColor="$background"
             >
               <XStack justifyContent="space-between" alignItems="flex-start" gap="$3">
-                <YStack gap="$2">
+                <YStack gap="$2" flex={1}>
                   <Paragraph size="$5" fontWeight="800" color="$color">
                     Tasa de abandono (Churn)
                   </Paragraph>
@@ -474,8 +498,8 @@ export const AdminDashboardScreen = () => {
                   </Paragraph>
                 </YStack>
               </XStack>
-              <XStack justifyContent="space-between" alignItems="flex-end" mt="$4">
-                <YStack gap="$2">
+              <XStack justifyContent="space-between" alignItems="flex-end" mt="$4" flexWrap="wrap" gap="$2">
+                <YStack gap="$2" flex={1} minWidth={120}>
                   <Paragraph size="$6" fontWeight="900" color="$color">
                     4.26%
                   </Paragraph>
@@ -489,8 +513,10 @@ export const AdminDashboardScreen = () => {
 
             <Card
               flex={1}
+              width="100%"
               minWidth={0}
               maxWidth="100%"
+              $md={{ width: 'auto' }}
               padding="$5"
               borderRadius="$5"
               borderWidth={1}
@@ -498,7 +524,7 @@ export const AdminDashboardScreen = () => {
               backgroundColor="$background"
             >
               <XStack justifyContent="space-between" alignItems="flex-start" gap="$3">
-                <YStack gap="$2">
+                <YStack gap="$2" flex={1}>
                   <Paragraph size="$5" fontWeight="800" color="$color">
                     Crecimiento de usuarios
                   </Paragraph>
@@ -507,8 +533,8 @@ export const AdminDashboardScreen = () => {
                   </Paragraph>
                 </YStack>
               </XStack>
-              <XStack justifyContent="space-between" alignItems="flex-end" mt="$4">
-                <YStack gap="$2">
+              <XStack justifyContent="space-between" alignItems="flex-end" mt="$4" flexWrap="wrap" gap="$2">
+                <YStack gap="$2" flex={1} minWidth={120}>
                   <Paragraph size="$6" fontWeight="900" color="$color">
                     3,768
                   </Paragraph>
@@ -593,7 +619,9 @@ export const AdminDashboardScreen = () => {
         {/* Columna derecha (1/3): Rendimiento del Producto */}
         <YStack
           flex={1}
+          width="100%"
           minWidth={0}
+          $md={{ width: 'auto' }}
           $xl={{ flexBasis: '33.3333%', maxWidth: '33.3333%' }}
           gap="$4"
         >

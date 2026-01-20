@@ -74,7 +74,8 @@ export function SelectWithFilter({
     }
   }, [open])
 
-  const handleClose = (isOpen: boolean) => {
+  const handleOpenChange = (isOpen: boolean) => {
+    if (disabled && isOpen) return
     setOpen(isOpen)
     if (!isOpen) {
       setSearch('')
@@ -104,43 +105,25 @@ export function SelectWithFilter({
       )}
       <Popover
         open={open}
-        onOpenChange={handleClose}
+        onOpenChange={handleOpenChange}
         size="$5"
         allowFlip
         placement="bottom-start"
         offset={4}
       >
-        <Adapt when="sm" platform="touch">
-          <Sheet native modal dismissOnSnapToBottom animation="medium">
-            <Sheet.Frame>
-              <Sheet.Handle />
-              <Sheet.ScrollView padding="$4">
-                <Adapt.Contents />
-              </Sheet.ScrollView>
-            </Sheet.Frame>
-            <Sheet.Overlay
-              bg="$shadowColor"
-              animation="lazy"
-              enterStyle={{ opacity: 0 }}
-              exitStyle={{ opacity: 0 }}
-            />
-          </Sheet>
-        </Adapt>
-
-        <Popover.Trigger asChild>
-          <Button
+        <Popover.Trigger asChild disabled={disabled}>
+          <XStack
             id="select-trigger"
-            disabled={disabled}
-            onPress={() => setOpen(!open)}
+            alignItems="center"
             justifyContent="space-between"
             borderWidth={1}
             borderColor={error ? '$red10' : '$borderColor'}
             backgroundColor="$background"
-            iconAfter={ChevronDown}
-            fontWeight="500"
-            height={52}
             borderRadius="$5"
             paddingHorizontal="$4"
+            gap="$2"
+            height={52}
+            cursor={disabled ? 'not-allowed' : 'pointer'}
             hoverStyle={{
               borderColor: error ? '$red10' : '$borderColorHover',
               backgroundColor: '$backgroundHover',
@@ -149,7 +132,7 @@ export function SelectWithFilter({
               scale: 0.98,
             }}
             opacity={disabled ? 0.6 : 1}
-            cursor={disabled ? 'not-allowed' : 'pointer'}
+            pointerEvents={disabled ? 'none' : 'auto'}
           >
             <XStack alignItems="center" gap="$2" flex={1}>
               {selectedOption?.icon && (
@@ -183,7 +166,8 @@ export function SelectWithFilter({
                 {selectedOption ? selectedOption.label : placeholder}
               </Paragraph>
             </XStack>
-          </Button>
+            <ChevronDown size={18} color="$colorFocus" />
+          </XStack>
         </Popover.Trigger>
 
         <Popover.Content
@@ -191,17 +175,27 @@ export function SelectWithFilter({
           borderColor="$borderColor"
           backgroundColor="$background"
           borderRadius="$5"
-          shadowColor="$color"
+          shadowColor="$shadowColor"
           shadowOffset={{ width: 0, height: 4 }}
           shadowOpacity={0.1}
           shadowRadius={12}
           padding="$4"
           gap="$3"
           maxHeight={isWeb ? 400 : '80%'}
+          minWidth={isWeb ? 320 : undefined}
           width={isWeb ? undefined : '100%'}
-          enterStyle={{ opacity: 0, scale: 0.95, y: -10 }}
+          elevationAndroid={8}
+          opacity={1}
+          position="relative"
+          enterStyle={{ opacity: 1, scale: 1, y: 0 }}
           exitStyle={{ opacity: 0, scale: 0.95, y: -10 }}
           animation="quick"
+          pointerEvents="auto"
+          style={{
+            opacity: 1,
+            display: 'flex',
+            visibility: 'visible',
+          }}
         >
           {isWeb && <Popover.Arrow borderWidth={1} borderColor="$borderColor" />}
           <XStack
