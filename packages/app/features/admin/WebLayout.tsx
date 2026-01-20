@@ -62,16 +62,17 @@ export function WebLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const media = useMedia()
-  // media.sm es true cuando la pantalla es >= sm (grande), así que invertimos para detectar pantallas pequeñas
-  const isSmallScreen = !media.sm
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [rootTheme, setRootTheme] = useRootTheme()
   const themeSetting = useThemeSetting()
   const [mounted, setMounted] = useState(false)
+  // Asumir escritorio por defecto para evitar parpadeo en carga inicial
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    setIsSmallScreen(!media.sm)
     // Cargar estado inicial desde localStorage
     const loadSidebarState = async () => {
       if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
@@ -84,7 +85,7 @@ export function WebLayout({ children }: { children: React.ReactNode }) {
       }
     }
     loadSidebarState()
-  }, [])
+  }, [media.sm])
 
   const toggleSidebar = () => {
     setSidebarCollapsed((v) => {

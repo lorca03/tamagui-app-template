@@ -2,15 +2,13 @@
 
 import { useState } from 'react'
 import { Button, Card, H1, H2, Paragraph, Separator, XStack, YStack, Avatar, isWeb } from 'tamagui'
-import { Edit, Facebook, Twitter, Linkedin, Instagram } from '@tamagui/lucide-icons'
+import { Pencil, Facebook, Twitter, Linkedin, Instagram } from '@tamagui/lucide-icons'
 import { ProfileEditModal, type ProfileData } from '@my/ui/src/ProfileEditModal'
 
-// Importación condicional de Linking para React Native
-let Linking: typeof import('expo-linking') | null = null
-try {
-  Linking = require('expo-linking')
-} catch {
-  // Linking no disponible (Next.js)
+// Tipo para Linking de expo-linking (sin importarlo)
+type LinkingType = {
+  canOpenURL: (url: string) => Promise<boolean>
+  openURL: (url: string) => Promise<void>
 }
 
 type AddressData = {
@@ -38,7 +36,11 @@ const initialAddressData: AddressData = {
   taxId: 'AS4568384',
 }
 
-export const AdminProfileScreen = () => {
+type AdminProfileScreenProps = {
+  linking?: LinkingType | null
+}
+
+export const AdminProfileScreen = ({ linking }: AdminProfileScreenProps = {}) => {
   const [profileData, setProfileData] = useState<ProfileData>(initialProfileData)
   const [addressData, setAddressData] = useState<AddressData>(initialAddressData)
   const [modalOpen, setModalOpen] = useState(false)
@@ -50,10 +52,10 @@ export const AdminProfileScreen = () => {
   const handleOpenUrl = async (url: string) => {
     if (isWeb) {
       window.open(url, '_blank')
-    } else if (Linking) {
-      const supported = await Linking.canOpenURL(url)
+    } else if (linking) {
+      const supported = await linking.canOpenURL(url)
       if (supported) {
-        await Linking.openURL(url)
+        await linking.openURL(url)
       }
     }
   }
@@ -164,7 +166,7 @@ export const AdminProfileScreen = () => {
             )}
             <Button
               size="$4"
-              icon={Edit}
+              icon={Pencil}
               variant="outlined"
               borderColor="$borderColor"
               backgroundColor="$background"
@@ -201,7 +203,7 @@ export const AdminProfileScreen = () => {
             </H2>
             <Button
               size="$4"
-              icon={Edit}
+              icon={Pencil}
               variant="outlined"
               borderColor="$borderColor"
               backgroundColor="$background"
@@ -293,7 +295,7 @@ export const AdminProfileScreen = () => {
             </H2>
             <Button
               size="$4"
-              icon={Edit}
+              icon={Pencil}
               variant="outlined"
               borderColor="$borderColor"
               backgroundColor="$background"

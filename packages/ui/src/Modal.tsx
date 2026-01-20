@@ -1,8 +1,7 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 import { Button, Dialog, XStack, YStack, Paragraph, ScrollView } from 'tamagui'
-import { X } from '@tamagui/lucide-icons'
 
 export type ModalProps = {
   open: boolean
@@ -25,19 +24,12 @@ export function Modal({
   maxWidth = 700,
   showCloseButton = true,
 }: ModalProps) {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
   const handleClose = () => {
     onOpenChange(false)
   }
 
   return (
-    <Dialog modal open={open && mounted} onOpenChange={onOpenChange}>
-      {mounted && (
+    <Dialog modal open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay
           key="overlay"
@@ -46,7 +38,6 @@ export function Modal({
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
           bg="$accent0"
-          zIndex={99_999}
         />
         <Dialog.Content
           bordered
@@ -71,7 +62,6 @@ export function Modal({
           padding="$6"
           backgroundColor="$background"
           borderColor="$borderColor"
-          zIndex={100_000}
           alignSelf="center"
           overflow="hidden"
         >
@@ -98,7 +88,7 @@ export function Modal({
                   <Button
                     size="$3"
                     circular
-                    icon={X}
+                    icon={<span style={{ fontWeight: 'bold', fontSize: 18 }}>&times;</span>}
                     onPress={handleClose}
                     backgroundColor="transparent"
                     hoverStyle={{ backgroundColor: '$backgroundHover' }}
@@ -134,7 +124,6 @@ export function Modal({
           </YStack>
         </Dialog.Content>
       </Dialog.Portal>
-      )}
     </Dialog>
   )
 }
